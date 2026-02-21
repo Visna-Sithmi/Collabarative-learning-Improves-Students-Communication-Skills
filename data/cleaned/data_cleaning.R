@@ -1,9 +1,12 @@
 data <- read.csv("C:\\Users\\ASUS\\Downloads\\CY07_MSU_STU_QQQ.csv")
+# Convert to data frame (safety step)
+#We do it to make sure the dataset is a data frame format, so all data manipulation functions work properly.
 data <- as.data.frame(data)
+# Check structure and summary of dataset
 str(data)
 summary(data)
 
-
+# Independent Variable (Collaborative Learning items)
 collaborative_vars <- c("ST100Q03TA",
                         "ST100Q04TA",
                         "ST102Q02TA",
@@ -14,6 +17,7 @@ collaborative_vars <- c("ST100Q03TA",
                         "ST206Q04HA",
                         "ST176Q06IA")
 
+# Dependent Variable (Communication Skill items)
 communication_vars <- c("ST097Q01TA",
                         "ST097Q03TA",
                         "ST211Q03HA",
@@ -25,13 +29,14 @@ communication_vars <- c("ST097Q01TA",
                         "ST218Q06HA",
                         "ST218Q04HA")
 
-
+# Extract only selected variables
 data_selected <- data[, c(collaborative_vars, communication_vars)]
+
 names(data_selected)
 names(data)
 summary(data_selected)
 
-#save data
+# Save into working dataframe
 df <- data_selected
 dim(df)
 
@@ -48,6 +53,7 @@ na_pct
 
 # see how many duplicates
 sum(duplicated(df)) 
+#Keep rows that are NOT duplicates
 df <- df[!duplicated(df), ]
 dim(df)
 
@@ -58,7 +64,7 @@ df[] <- lapply(df, function(x) as.numeric(x))
 collab_df <- df[, collaborative_vars]
 comm_df   <- df[, communication_vars]
 
-
+# Filter Students Based on Minimum Responses
 min_collab <- 5
 min_comm   <- 6
 
@@ -75,6 +81,8 @@ df_clean <- df[keep_rows, ]
 table(collab_answered)
 table(comm_answered)
 
+# Calculate average collaborative learning score
+# na.rm = TRUE ignores missing responses
 df_clean$collaborative_score <- rowMeans(df_clean[, collaborative_vars], na.rm = TRUE)
 df_clean$communication_score <- rowMeans(df_clean[, communication_vars], na.rm = TRUE)
 
@@ -90,3 +98,23 @@ df_clean <- df[keep_rows, ]
 dim(df_clean)
 
 
+# Check distribution of final scores
+
+summary(df_clean$collaborative_score)
+summary(df_clean$communication_score)
+
+
+getwd()
+setwd("C:/Users/ASUS/OneDrive/Documents/GitHub/Collabarative-learning-Improves-Students-Communication-Skills")
+
+
+getwd()
+# Save cleaned dataset
+write.csv(df_clean,
+          "data/cleaned/cleaned_collab_comm.csv",
+          row.names = FALSE)
+
+
+
+sum(is.na(df_clean$collaborative_score))
+sum(is.na(df_clean$communication_score))
