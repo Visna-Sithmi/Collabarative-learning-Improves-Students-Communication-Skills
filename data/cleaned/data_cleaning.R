@@ -14,8 +14,7 @@ collaborative_vars <- c("ST100Q03TA",
                         "ST104Q04NA",
                         "ST104Q02NA",
                         "ST206Q02HA",
-                        "ST206Q04HA",
-                        "ST176Q06IA")
+                        "ST206Q04HA")
 
 # Dependent Variable (Communication Skill items)
 communication_vars <- c("ST097Q01TA",
@@ -65,8 +64,8 @@ collab_df <- df[, collaborative_vars]
 comm_df   <- df[, communication_vars]
 
 # Filter Students Based on Minimum Responses
-min_collab <- 5
-min_comm   <- 6
+min_collab <- 4
+min_comm   <- 5
 
 #Count how many answers each student gave
 collab_answered <- rowSums(!is.na(collab_df))
@@ -90,6 +89,12 @@ table(collab_answered)
 table(comm_answered)
 
 
+#check distribution of final scores
+summary(df_clean$collaborative_score)
+summary(df_clean$communication_score)
+
+
+
 keep_rows <- (collab_answered >= 5) &
   (comm_answered >= 6)
 
@@ -98,10 +103,6 @@ df_clean <- df[keep_rows, ]
 dim(df_clean)
 
 
-# Check distribution of final scores
-
-summary(df_clean$collaborative_score)
-summary(df_clean$communication_score)
 
 
 getwd()
@@ -115,6 +116,11 @@ write.csv(df_clean,
           row.names = FALSE)
 
 
-
+#counts how many missing values (NA) are in that column.
 sum(is.na(df_clean$collaborative_score))
 sum(is.na(df_clean$communication_score))
+
+
+
+
+
