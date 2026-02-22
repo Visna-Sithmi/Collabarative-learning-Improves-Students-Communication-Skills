@@ -102,23 +102,6 @@ table(comm_answered)
 summary(df_clean$collaborative_score)
 summary(df_clean$communication_score)
 
-# IMPORTANT: keep your original code, but put scores AFTER this final filter
-keep_rows <- (collab_answered >= 5) &
-  (comm_answered >= 6)
-
-df_clean <- df[keep_rows, ]
-
-dim(df_clean)
-
-# ------------------------------------------------------------
-# REVERSE CODING AGAIN (because df_clean was recreated above)
-df_clean$ST097Q01TA <- 5 - df_clean$ST097Q01TA
-df_clean$ST097Q03TA <- 5 - df_clean$ST097Q03TA
-# Recalculate scores again (because df_clean was recreated)
-df_clean$collaborative_score <- rowMeans(df_clean[, collaborative_vars], na.rm = TRUE)
-df_clean$communication_score <- rowMeans(df_clean[, communication_vars], na.rm = TRUE)
-# ------------------------------------------------------------
-
 getwd()
 setwd("C:/Users/ASUS/OneDrive/Documents/GitHub/Collabarative-learning-Improves-Students-Communication-Skills")
 
