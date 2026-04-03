@@ -1,0 +1,27 @@
+setwd("/Users/primeshofficial/Desktop/TPSM Assignment")
+getwd()
+data <- read.csv("PISA_Cleaned_Data.csv")
+head(data)
+str(data)
+collaborative_vars <- c("ST206Q04HA", "ST206Q02HA", "ST153Q03HA", "ST176Q06IA", "ST206Q01HA")
+communication_vars <- c("ST097Q01TA", "ST218Q03HA", "ST218Q02HA", "ST218Q06HA", "ST218Q04HA")
+data$collaborative_score <- rowMeans(data[, collaborative_vars])
+data$communication_score <- rowMeans(data[, communication_vars])
+summary(data$collaborative_score)
+summary(data$communication_score)
+cor.test(data$collaborative_score, data$communication_score, method = "pearson")
+cor.test(data$collaborative_score, data$communication_score, method = "spearman")
+model <- lm(communication_score ~ collaborative_score, data = data)
+summary(model)
+
+hist(residuals(model))
+qqnorm(residuals(model))
+qqline(residuals(model))
+
+plot(data$collaborative_score, data$communication_score)
+abline(model)
+
+plot(model$fitted.values, residuals(model))
+abline(h = 0)
+
+write.csv(data, "Final_with_scores.csv", row.names = FALSE)
